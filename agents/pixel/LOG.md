@@ -9,4 +9,6 @@
   - SOUL.md: Persoonlijkheid gedefinieerd (focus op esthetiek en kwaliteit).
   - MEMORY.md: Geinitialiseerd.
   - PLAN.md: Eerste acties vastgelegd.
-  - Git commit: Pending.
+  - Git commit: Initialisatie React + Tailwind structuur.
+  - Fix: Tailwind v4 build issue opgelost door overstap naar `@tailwindcss/vite` plugin.
+  - Migratie: `fotopuzzel.js` engine gemigreerd naar `src/App.jsx`.
