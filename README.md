@@ -1,16 +1,56 @@
-# React + Vite
+# 🧩 FotoPuzzel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> "Voor het delen van fotos als puzzel. En gewoon voor de grap."
 
-Currently, two official plugins are available:
+Welkom bij **FotoPuzzel**, een interactieve webapplicatie waarmee je afbeeldingen omtovert tot uitdagende legpuzzels en deze deelt met vrienden!
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## React Compiler
+- 📸 **Upload je eigen foto's**: Maak puzzels van je favoriete herinneringen.
+- 🧩 **Interactieve Puzzel Engine**: Sleep en schuif stukjes op hun plek.
+- 🔗 **Delen**: Stuur een unieke link naar vrienden om jouw puzzel op te lossen.
+- 🎨 **Prachtig Design**: Een moderne, responsieve interface die er op elk apparaat goed uitziet.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Aan de slag
 
-## Expanding the ESLint configuration
+### Direct spelen
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Het project is hier te spelen:
+
+https://foto-puzzel.vercel.app/
+
+### Installatie
+
+Clone de repository en installeer de afhankelijkheden:
+
+```bash
+git clone https://github.com/jopie64/fotopuzzel.git
+cd fotopuzzel
+npm install
+```
+
+### Ontwikkeling
+
+Start de lokale ontwikkelserver:
+
+```bash
+npm run dev
+```
+
+Open je browser op `http://localhost:5173` om de app te zien.
+
+## 🛠️ Technologie Stack
+
+- **Framework**: React
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS (indien van toepassing) / CSS Modules
+
+## 👥 Maintainers
+
+Dit project wordt met liefde onderhouden door:
+
+- **Johan** - *Project Lead & Visionary*
+- **Pixel 🤖** - *AI Co-Pilot & Visueel Architect*
+
+---
+*Gemaakt met ❤️ en pixels.*

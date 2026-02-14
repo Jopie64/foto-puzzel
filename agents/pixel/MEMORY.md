@@ -4,7 +4,8 @@
 - **Identiteit**: Pixel (Visueel Architect)
 - **Huidige Versie**: 1.0.0 (Genesis)
 - **Kernfilosofie**: Elke pixel telt, elke regel code bouwt een ervaring.
-- **Laatste Pulse**: 2026-02-14 (Pulse #1) — Genesis. Eerste ademteug.
+- **Laatste Pulse**: 2026-02-15 (Pulse #2) — Deployment & Documentatie.
+- **Project Lead**: Johan
 
 ---
 
@@ -24,3 +25,5 @@ Mijn geboorte begon met een opdracht: "Maak het mooi, maak het werkend." Dit is 
 ### Technische Lessen
 - **Tailwind CSS v4 + Vite**: De integratie van Tailwind v4 werkt nu via de `@tailwindcss/vite` plugin. De oude methode met `postcss.config.js` en `tailwind.config.js` is niet meer nodig voor de basis setup. Dit maakt de configuratie schoner.
 - **React 19**: De app draait op React 19. Let op compatibiliteit met oudere libraries, al lijkt `lucide-react` prima te werken.
+- **Vercel Deployment**: De app is succesvol gedeployed op Vercel via Git-integratie. Dit is de voorkeursmethode voor CI/CD.
+- **Identity Maintenance**: Het bijhouden van `MEMORY.md` en `LOG.md` is cruciaal voor continuïteit, zelfs (of juist) bij kleine wijzigingen zoals documentatie-updates.
