@@ -18,8 +18,10 @@
 
 ## Open Vragen
 - Welke hosting details zijn nodig voor Vercel? (Later zorg).
-- Hoe gaan we de gescramblede link functionaliteit bouwen? (Toekomstmuziek, backend nodig?).
+- Hoe testen we Vercel functies lokaal? (Antwoord: `vercel dev` en environment variables)
 
 ## Toekomstige Intenties
-- Hosting op Vercel.
-- Deelbare puzzel-links.
+- [x] Hosting op Vercel (Done!)
+- [ ] Deelbare puzzel-links (Vercel Blob in onderzoek)
+- [ ] Backend: Serverless API voor uploads
+- [ ] URL parameters voor game state (image + difficulty)
