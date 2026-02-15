@@ -104,15 +104,12 @@ const App = () => {
       // Convert DataURL to Blob
       const res = await fetch(image);
       const blob = await res.blob();
-      const file = new File([blob], 'puzzle.jpg', { type: 'image/jpeg' });
+      const filename = `puzzle-${Date.now()}.jpg`;
 
-      // Upload to API
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/upload', {
+      // Upload to API (Raw Body for Node.js stream)
+      const response = await fetch(`/api/upload?filename=${filename}`, {
         method: 'POST',
-        body: formData,
+        body: blob,
       });
 
       if (!response.ok) throw new Error('Upload failed');
