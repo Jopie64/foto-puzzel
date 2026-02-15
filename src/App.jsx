@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Upload, Play, RefreshCw, CheckCircle, Sparkles } from 'lucide-react';
+import { Upload, Play, RefreshCw, CheckCircle, Sparkles, Share2, Link, Copy } from 'lucide-react';
 
 const App = () => {
   // --- State ---
@@ -13,8 +13,32 @@ const App = () => {
   const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
   const [dragCurrentPos, setDragCurrentPos] = useState({ x: 0, y: 0 });
   
+  // --- Share State ---
+  const [isUploading, setIsUploading] = useState(false);
+  const [shareUrl, setShareUrl] = useState(null);
+
   const containerRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  // --- URL Parser & Initialisatie ---
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const imgParam = params.get('img');
+    const sizeParam = params.get('size');
+
+    if (imgParam) {
+      setImage(imgParam);
+      // Bereken aspect ratio van geladen afbeelding
+      const img = new Image();
+      img.onload = () => {
+        setAspectRatio(img.width / img.height);
+      };
+      img.src = imgParam;
+    }
+    if (sizeParam) {
+      setGridSize(parseInt(sizeParam, 10));
+    }
+  }, []);
 
   // --- Confetti Effect ---
   const confettiParticles = useMemo(() => {
@@ -29,15 +53,18 @@ const App = () => {
     }));
   }, [gameState]);
 
-  // --- Geoptimaliseerde Foto Upload (Resize voor performance) ---
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      processImage(file);
+    }
+  };
+
+  const processImage = (file) => {
       const reader = new FileReader();
       reader.onload = (event) => {
         const img = new Image();
         img.onload = () => {
-          // Downsampling: Verklein de foto naar max 1200px voor soepele performance
           const MAX_SIZE = 1200;
           let width = img.width;
           let height = img.height;
@@ -61,11 +88,55 @@ const App = () => {
           ctx.drawImage(img, 0, 0, width, height);
 
           setAspectRatio(width / height);
-          setImage(canvas.toDataURL('image/jpeg', 0.85)); // Gecomprimeerde data URL
+          setImage(canvas.toDataURL('image/jpeg', 0.85));
+          setShareUrl(null); // Reset share URL bij nieuwe afbeelding
         };
         img.src = event.target.result;
       };
       reader.readAsDataURL(file);
+  };
+
+  const handleShare = async () => {
+    if (!image) return;
+    setIsUploading(true);
+
+    try {
+      // Convert DataURL to Blob
+      const res = await fetch(image);
+      const blob = await res.blob();
+      const file = new File([blob], 'puzzle.jpg', { type: 'image/jpeg' });
+
+      // Upload to API
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error('Upload failed');
+
+      const data = await response.json();
+      
+      // Construct Share URL
+      const url = new URL(window.location.href);
+      url.searchParams.set('img', data.url);
+      url.searchParams.set('size', gridSize);
+      
+      setShareUrl(url.toString());
+    } catch (error) {
+      console.error('Share failed:', error);
+      alert('Er ging iets mis bij het delen. Probeer het later opnieuw.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const copyToClipboard = () => {
+    if (shareUrl) {
+      navigator.clipboard.writeText(shareUrl);
+      alert('Link gekopieerd!');
     }
   };
 
@@ -328,12 +399,43 @@ const App = () => {
             </div>
           </div>
 
-          <button 
-            disabled={!image} onClick={startGame}
-            className={`mt-10 w-full py-6 rounded-[2.5rem] font-black text-xl transition-all ${image ? 'bg-white text-black active:scale-95' : 'bg-neutral-900 text-neutral-800'}`}
-          >
-            START
-          </button>
+          <div className="w-full mt-10 space-y-4">
+            <button 
+              disabled={!image} onClick={startGame}
+              className={`w-full py-6 rounded-[2.5rem] font-black text-xl transition-all ${image ? 'bg-white text-black active:scale-95 shadow-2xl shadow-white/20' : 'bg-neutral-900 text-neutral-800'}`}
+            >
+              START SPEL
+            </button>
+
+            {image && !shareUrl && (
+              <button 
+                onClick={handleShare}
+                disabled={isUploading}
+                className="w-full py-4 rounded-[2.5rem] font-bold text-sm bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-all flex items-center justify-center gap-2"
+              >
+                {isUploading ? (
+                  <RefreshCw className="animate-spin" size={16} />
+                ) : (
+                  <Share2 size={16} />
+                )}
+                MAAK DEELBARE LINK
+              </button>
+            )}
+
+            {shareUrl && (
+              <div className="w-full p-4 bg-neutral-900 rounded-3xl border border-neutral-800 animate-in slide-in-from-top-2">
+                <p className="text-center text-[10px] text-neutral-500 font-bold uppercase mb-2">Jouw Unieke Link</p>
+                <div 
+                  onClick={copyToClipboard}
+                  className="flex items-center gap-3 bg-black p-3 rounded-xl cursor-pointer hover:bg-neutral-950 transition-colors group"
+                >
+                  <Link size={16} className="text-blue-500 shrink-0" />
+                  <span className="text-xs text-neutral-300 truncate font-mono">{shareUrl}</span>
+                  <Copy size={16} className="text-neutral-600 group-hover:text-white ml-auto shrink-0" />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         <div className="flex-1 w-full flex flex-col items-center justify-center p-4">
