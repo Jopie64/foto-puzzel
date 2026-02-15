@@ -19,6 +19,10 @@ const App = () => {
 
   const containerRef = useRef(null);
   const fileInputRef = useRef(null);
+  
+  // HAAL DIT UIT ENVIRONMENT VARIABLES (Stel in op Vercel + .env.local)
+  // Voorbeeld: https://[store-id].public.blob.vercel-storage.com/
+  const BLOB_BASE_URL = import.meta.env.VITE_BLOB_BASE_URL || ''; 
 
   // --- URL Parser & Initialisatie ---
   useEffect(() => {
@@ -27,18 +31,57 @@ const App = () => {
     const sizeParam = params.get('size');
 
     if (imgParam) {
-      setImage(imgParam);
-      // Bereken aspect ratio van geladen afbeelding
+      // Als BLOB_BASE_URL is ingesteld en imgParam is geen volledige URL, plak ze aan elkaar
+      const fullUrl = (imgParam.startsWith('http') || !BLOB_BASE_URL) 
+        ? imgParam 
+        : `${BLOB_BASE_URL}${imgParam}`;
+
+      // Preload image
       const img = new Image();
       img.onload = () => {
         setAspectRatio(img.width / img.height);
+        
+        // Teken op canvas om DataURL te krijgen (consistentie met upload flow)
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        
+        setImage(canvas.toDataURL('image/jpeg', 0.85));
+        
+        // AUTO START als we vanuit een link komen
+        if (sizeParam) setGridSize(parseInt(sizeParam, 10));
+        
+        // Kleine vertraging om state te laten settelen, dan starten
+        setTimeout(() => {
+          startGameFromLink(parseInt(sizeParam, 10) || 4); 
+        }, 100);
       };
-      img.src = imgParam;
-    }
-    if (sizeParam) {
-      setGridSize(parseInt(sizeParam, 10));
+      img.crossOrigin = "Anonymous"; // Nodig voor canvas manipulatie van externe afbeeldingen
+      img.src = fullUrl;
     }
   }, []);
+
+  // Aparte startfunctie die direct de parameters accepteert (omdat state updates async zijn)
+  const startGameFromLink = (size) => {
+    // We kunnen hier niet direct `startGame` aanroepen omdat `pieces` state logic daarop vertrouwt
+    // We simuleren een klik op start, maar passen de state logic aan voor directe start
+    setGridSize(size);
+    // Trigger start logic (kopie van startGame, maar roept direct animating aan)
+    // Omdat startGame state afhankelijk is, kunnen we beter een flag zetten of useEffect gebruiken?
+    // Beter: We breiden startGame uit of roepen hem aan via een ref/effect. 
+    // Eenvoudigste fix voor nu: We zetten een 'wacht op start' state.
+    setGameState('ready_to_start');
+  };
+
+  // Effect om daadwerkelijk te starten als alles ingeladen is
+  useEffect(() => {
+    if (gameState === 'ready_to_start' && image) {
+      startGame();
+    }
+  }, [gameState, image]);
+
 
   // --- Confetti Effect ---
   const confettiParticles = useMemo(() => {
@@ -104,10 +147,10 @@ const App = () => {
       // Convert DataURL to Blob
       const res = await fetch(image);
       const blob = await res.blob();
-      const filename = `puzzle-${Date.now()}.jpg`;
 
       // Upload to API (Raw Body for Node.js stream)
-      const response = await fetch(`/api/upload?filename=${filename}`, {
+      // Filename wordt nu door de backend gegenereerd voor security
+      const response = await fetch('/api/upload', {
         method: 'POST',
         body: blob,
       });
@@ -117,8 +160,18 @@ const App = () => {
       const data = await response.json();
       
       // Construct Share URL
+      // We gebruiken alleen de bestandsnaam als BLOB_BASE_URL is ingesteld
+      const fileUrl = data.url;
+      const filename = fileUrl.split('/').pop(); // Haal bestandsnaam uit URL
+      
       const url = new URL(window.location.href);
-      url.searchParams.set('img', data.url);
+      
+      if (BLOB_BASE_URL) {
+        url.searchParams.set('img', filename);
+      } else {
+        url.searchParams.set('img', fileUrl); // Fallback: volledige URL
+      }
+      
       url.searchParams.set('size', gridSize);
       
       setShareUrl(url.toString());
