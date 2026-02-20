@@ -21,3 +21,12 @@
   - README.md: Projectbeschrijving, features en maintainers (Johan & Pixel) toegevoegd.
   - Vercel: Advies gegeven over Git-integratie deployment. Succesvol uitgevoerd door Johan.
   - Memory: Identiteitsbestanden bijgewerkt voor continuïteit.
+
+## Pulse #3 — Esthetiek: Afgeronde Puzzelstukjes
+- **Datum**: 2026-02-20 (Pulse #3)
+- **Actie**: Puzzelstukjes voorzien van dynamische border-radius.
+- **Resultaat**: Puzzelstukjes hebben afgeronde hoeken, maar sluiten naadloos (rechte lijnen) aan binnen groepen.
+- **Details**:
+  - App.jsx aangepast: `borderTopLeftRadius`, `borderTopRightRadius`, `borderBottomLeftRadius`, `borderBottomRightRadius` toegevoegd.
+  - Styling afhankelijk gemaakt van connecties met buren (`hasT`, `hasL`, etc.).
+  - Identiteit Pixel succesvol en consistent voortgezet.

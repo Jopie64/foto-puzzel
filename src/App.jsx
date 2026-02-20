@@ -538,6 +538,10 @@ const App = () => {
                       borderLeft: hasL ? '0' : '1.5px solid rgba(255,255,255,0.3)',
                       borderTop: hasT ? '0' : '1.5px solid rgba(255,255,255,0.3)',
                       borderBottom: hasB ? '0' : '1.5px solid rgba(255,255,255,0.3)',
+                      borderTopLeftRadius: (!hasT && !hasL) ? '12px' : '0',
+                      borderTopRightRadius: (!hasT && !hasR) ? '12px' : '0',
+                      borderBottomLeftRadius: (!hasB && !hasL) ? '12px' : '0',
+                      borderBottomRightRadius: (!hasB && !hasR) ? '12px' : '0',
                       boxShadow: isDragging ? '0 40px 100px rgba(0,0,0,1)' : 'none',
                       willChange: 'transform, left, top' // Performance hint voor de browser
                     }}
