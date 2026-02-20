@@ -517,6 +517,20 @@ const App = () => {
                 const hasT = pieces.some(o => o.groupId === p.groupId && o.currentX === p.currentX && o.currentY === p.currentY - 1);
                 const snapping = (Date.now() - p.lastSnap) < 450;
 
+                const shadowList = [];
+                const outlineColor = 'rgba(0,0,0,0.7)';
+                const lw = '1.5px'; // line width
+                const dw = '1px'; // diagonal offset for corners
+                if (!hasT) shadowList.push(`0 -${lw} 0 0 ${outlineColor}`);
+                if (!hasR) shadowList.push(`${lw} 0 0 0 ${outlineColor}`);
+                if (!hasB) shadowList.push(`0 ${lw} 0 0 ${outlineColor}`);
+                if (!hasL) shadowList.push(`-${lw} 0 0 0 ${outlineColor}`);
+                if (!hasT && !hasR) shadowList.push(`${dw} -${dw} 0 0 ${outlineColor}`);
+                if (!hasT && !hasL) shadowList.push(`-${dw} -${dw} 0 0 ${outlineColor}`);
+                if (!hasB && !hasR) shadowList.push(`${dw} ${dw} 0 0 ${outlineColor}`);
+                if (!hasB && !hasL) shadowList.push(`-${dw} ${dw} 0 0 ${outlineColor}`);
+                if (isDragging) shadowList.push('0 40px 100px rgba(0,0,0,1)');
+
                 return (
                   <div 
                     key={p.id}
@@ -542,7 +556,7 @@ const App = () => {
                       borderTopRightRadius: (!hasT && !hasR) ? '12px' : '0',
                       borderBottomLeftRadius: (!hasB && !hasL) ? '12px' : '0',
                       borderBottomRightRadius: (!hasB && !hasR) ? '12px' : '0',
-                      boxShadow: isDragging ? '0 40px 100px rgba(0,0,0,1)' : 'none',
+                      boxShadow: shadowList.length > 0 ? shadowList.join(', ') : 'none',
                       willChange: 'transform, left, top' // Performance hint voor de browser
                     }}
                   />

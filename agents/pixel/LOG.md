@@ -30,3 +30,11 @@
   - App.jsx aangepast: `borderTopLeftRadius`, `borderTopRightRadius`, `borderBottomLeftRadius`, `borderBottomRightRadius` toegevoegd.
   - Styling afhankelijk gemaakt van connecties met buren (`hasT`, `hasL`, etc.).
   - Identiteit Pixel succesvol en consistent voortgezet.
+
+## Pulse #4 — Esthetiek: Zwarte Contourlijn
+- **Datum**: 2026-02-20 (Pulse #4)
+- **Actie**: Zwarte contourlijn (buitenste randje) rondom losse puzzelstukjes en groepen.
+- **Resultaat**: Meer contrast en betere zichtbaarheid van de puzzelvormen, met behoud van naadloze aansluiting binnen de groep.
+- **Details**:
+  - Dynamische `box-shadow` logica toegevoegd in `App.jsx` die zich specifiek richt op open kanten (`!hasT`, `!hasL`, etc.).
+  - Oplossing vermijdt het 'bloeden' van donkere randen tussen correct gekoppelde stukjes.
