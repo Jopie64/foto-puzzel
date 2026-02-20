@@ -38,3 +38,12 @@
 - **Details**:
   - Dynamische `box-shadow` logica toegevoegd in `App.jsx` die zich specifiek richt op open kanten (`!hasT`, `!hasL`, etc.).
   - Oplossing vermijdt het 'bloeden' van donkere randen tussen correct gekoppelde stukjes.
+
+## Pulse #5 — Esthetiek: Inset Randen (Fixing Overlap)
+- **Datum**: 2026-02-20 (Pulse #5)
+- **Actie**: Zwarte en witte contourlijnen omgebouwd om strict binnen de element-grenzen te vallen.
+- **Resultaat**: Geen visuele overlap meer over naastliggende puzzelstukjes (door outside drop-shadows).
+- **Details**:
+  - `border` (welke door `box-sizing: border-box` naar binnen trekt) wordt nu gebruikt voor het zwarte, afsluitende randje.
+  - `box-shadow: inset ...` wordt tegelijk gebruikt voor het binnenste witte accent-lijntje.
+  - Oogt veel netter en clipt correct af op de puzzelstukgrenzen.

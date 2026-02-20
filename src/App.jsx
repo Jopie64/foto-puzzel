@@ -518,17 +518,13 @@ const App = () => {
                 const snapping = (Date.now() - p.lastSnap) < 450;
 
                 const shadowList = [];
-                const outlineColor = 'rgba(0,0,0,0.7)';
+                const innerWhite = 'rgba(255,255,255,0.4)';
                 const lw = '1.5px'; // line width
-                const dw = '1px'; // diagonal offset for corners
-                if (!hasT) shadowList.push(`0 -${lw} 0 0 ${outlineColor}`);
-                if (!hasR) shadowList.push(`${lw} 0 0 0 ${outlineColor}`);
-                if (!hasB) shadowList.push(`0 ${lw} 0 0 ${outlineColor}`);
-                if (!hasL) shadowList.push(`-${lw} 0 0 0 ${outlineColor}`);
-                if (!hasT && !hasR) shadowList.push(`${dw} -${dw} 0 0 ${outlineColor}`);
-                if (!hasT && !hasL) shadowList.push(`-${dw} -${dw} 0 0 ${outlineColor}`);
-                if (!hasB && !hasR) shadowList.push(`${dw} ${dw} 0 0 ${outlineColor}`);
-                if (!hasB && !hasL) shadowList.push(`-${dw} ${dw} 0 0 ${outlineColor}`);
+                if (!hasT) shadowList.push(`inset 0 ${lw} 0 0 ${innerWhite}`);
+                if (!hasR) shadowList.push(`inset -${lw} 0 0 0 ${innerWhite}`);
+                if (!hasB) shadowList.push(`inset 0 -${lw} 0 0 ${innerWhite}`);
+                if (!hasL) shadowList.push(`inset ${lw} 0 0 0 ${innerWhite}`);
+
                 if (isDragging) shadowList.push('0 40px 100px rgba(0,0,0,1)');
 
                 return (
@@ -548,10 +544,10 @@ const App = () => {
                       backgroundPosition: `${(p.correctX / (gridSize - 1)) * 100}% ${(p.correctY / (gridSize - 1)) * 100}%`,
                       transition: isDragging ? 'none' : `all 0.65s cubic-bezier(0.19, 1, 0.22, 1)`,
                       transitionDelay: `${p.delay || 0}ms`,
-                      borderRight: hasR ? '0' : '1.5px solid rgba(255,255,255,0.3)',
-                      borderLeft: hasL ? '0' : '1.5px solid rgba(255,255,255,0.3)',
-                      borderTop: hasT ? '0' : '1.5px solid rgba(255,255,255,0.3)',
-                      borderBottom: hasB ? '0' : '1.5px solid rgba(255,255,255,0.3)',
+                      borderRight: hasR ? '0' : '1.5px solid rgba(0,0,0,0.8)',
+                      borderLeft: hasL ? '0' : '1.5px solid rgba(0,0,0,0.8)',
+                      borderTop: hasT ? '0' : '1.5px solid rgba(0,0,0,0.8)',
+                      borderBottom: hasB ? '0' : '1.5px solid rgba(0,0,0,0.8)',
                       borderTopLeftRadius: (!hasT && !hasL) ? '12px' : '0',
                       borderTopRightRadius: (!hasT && !hasR) ? '12px' : '0',
                       borderBottomLeftRadius: (!hasB && !hasL) ? '12px' : '0',
