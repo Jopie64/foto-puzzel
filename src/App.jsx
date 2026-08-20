@@ -250,7 +250,11 @@ const App = () => {
       }
     }
 
-    return next.map(({ visited, ...p }) => p);
+    return next.map(p => {
+      const copy = { ...p };
+      delete copy.visited;
+      return copy;
+    });
   };
 
   const startGame = () => {
